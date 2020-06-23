@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% with errors = get_flashed_messages() %}
+    {% if errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for e in errors %}
+          {{ e }} <br>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  <p class="lead">
+    Создать пользователя
+  </p>
+
+  <form method="post">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" name="username" id="username">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" name="password" id="password">
+    </div>
+    <button type="submit" class="btn btn-success">Создать</button>
+  </form>
+
+  <p class="lead mt-3">
+    Список пользователей
+  </p>
+  <div>
+    {% for u in users_list %}
+      <b>{{ u.0 }}.</b> {{ u.1 }}
+      {% if u.0 != user.0 %}
+        <a href="/users/del/{{ u.0 }}" class="close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      {% endif %}
+      <hr>
+    {% endfor %}
+  </div>
+{% endblock %}

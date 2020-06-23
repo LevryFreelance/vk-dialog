@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if errors %}
+    <div class="alert alert-danger" role="alert">
+      {% for e in errors %}
+        {{ e }} <br>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <form method="post">
+    <div class="form-group row">
+      <div class="col-5">
+        <label for="main_account">Основной аккаунт</label>
+        <input id="main_account" name="main_account" type="text" class="form-control mb-3"
+               placeholder="tel:pass;user:pass@ip:port"
+               required>
+
+        <label for="add_accounts">Дополнительные аккаунты</label>
+        <textarea name="add_accounts" id="add_accounts" rows="6" class="form-control"
+                  placeholder="tel:pass;user:pass@ip:port tel:pass;user:pass@ip:port" required></textarea>
+      </div>
+      <div class="col-7">
+        <label for="commands">Диалог</label>
+        <textarea id="commands" name="commands" class="form-control" rows="10" required></textarea>
+        <div class="row form-group mt-3">
+          <div class="col-8">
+            <button class="btn btn-success form-control">Запуск</button>
+          </div>
+          <div class="col-4">
+            <input id="latency" name="latency_from" type="number" class="form-control mb-3"
+                   placeholder="Задержка, от" required>
+            <input id="latency" name="latency_to" type="number" class="form-control mb-3"
+                   placeholder="Задержка, до" required>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}

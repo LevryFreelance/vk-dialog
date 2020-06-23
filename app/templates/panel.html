@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {% if dialogs %}
+    <p class="lead">
+      Диалоги в работе <br>
+    </p>
+    {% for d in dialogs %}
+      <div class="mb-3">
+        <b>{{ d.0 }}.</b> {{ d.2|truncate(150) }}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="lead">
+      Диалогов в работе нет <br>
+    </p>
+  {% endif %}
+  <a href="/dialog" class="btn btn-success mt-3" role="button" aria-pressed="true">Создать</a>
+{% endblock %}
