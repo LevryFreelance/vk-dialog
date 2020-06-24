@@ -8,7 +8,12 @@
     </p>
     {% for d in dialogs %}
       <div class="mb-3">
-        <b>{{ d.0 }}.</b> {{ d.2|truncate(150) }}
+        <b>{{ d.0 }}.</b> {{ d.2|truncate(150) }}<br>
+        <small>
+          Закончится <b>{{ dialogs_time[d.0][0] }} ~ {{ dialogs_time[d.0][1] }}</b><br>
+          <a href="/dialog/stop/{{ d.0 }}">Остановить</a>
+        </small>
+        <hr>
       </div>
     {% endfor %}
   {% else %}

@@ -5,7 +5,7 @@ from time import sleep
 from flask import render_template, redirect, request, flash, get_flashed_messages, current_app
 from app import app, api
 from app.utils import get_user_session, parse_commands, parse_accounts
-from app.models.dialogs import create_dialog, update_dialog_running, update_dialog_step
+from app.models.dialogs import create_dialog, disable_dialog, update_dialog_step, get_dialog_by_id
 
 
 @app.route('/dialog', methods=['GET', 'POST'])
@@ -42,6 +42,12 @@ def dialog_create_page():
                            errors=get_flashed_messages(category_filter='error'))
 
 
+@app.route('/dialog/stop/<int:dialog_id>')
+def dialog_stop(dialog_id):
+    disable_dialog(dialog_id)
+    return redirect('/panel')
+
+
 def start_dialog_threads(main_account, add_accounts, commands, l_from, l_to, dialog_id):
     with app.app_context():
 
@@ -61,7 +67,7 @@ def start_dialog_threads(main_account, add_accounts, commands, l_from, l_to, dia
 
             if i == len(x) - 1:
                 t.join()
-                update_dialog_running(dialog_id)
+                disable_dialog(dialog_id)
                 print('DIALOG END')
 
 
@@ -71,6 +77,12 @@ def run_dialog(commands, main, add, i, dialog_id):
         add_accounts = api.get_sessions(add)
 
         for step, row in enumerate(commands):
+            d = get_dialog_by_id(dialog_id)[0]
+
+            if not d[7]:
+                print('STOP')
+                return False
+
             latency = int(row[1])
             msg = row[2]
             sleep(latency)
