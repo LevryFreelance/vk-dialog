@@ -9,6 +9,9 @@ from app import app
 from app.utils import get_user_session
 from app.models.users import create_user, get_all_users, get_user, auth_user
 
+@app.route('/', methods=['GET', 'POST'])
+def hello():
+    return redirect('/login')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():

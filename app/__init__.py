@@ -44,5 +44,5 @@ def query_db(query, args=()):
 
 from app.views import login, panel, dialog, users
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
