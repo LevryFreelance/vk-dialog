@@ -1,12 +1,23 @@
 import random
 import re
 import os
+import time
 
 import requests
 import vk_api
 from flask import flash
+from python3_anticaptcha import ImageToTextTask, errors
 
 from app.utils import parse_accounts
+from app.ANTICAPTCHA_TOKEN import ANTICAPTCHA_TOKEN
+
+
+# def captcha_handler(captcha):
+#     # TOKEN is not free, see `www.anticaptcha.com`
+#     key = ImageToTextTask.ImageToTextTask(anticaptcha_key=ANTICAPTCHA_TOKEN, save_format='const') \
+#             .captcha_handler(captcha_link=captcha.get_url())
+#     # Пробуем снова отправить запрос с капчей
+#     return captcha.try_again(key['solution']['text'])
 
 
 def do_login(login, password, proxy=None):
@@ -14,7 +25,8 @@ def do_login(login, password, proxy=None):
                               app_id=2685278,
                               scope=(vk_api.VkUserPermissions.MESSAGES |
                                      vk_api.VkUserPermissions.OFFLINE |
-                                     vk_api.VkUserPermissions.PHOTOS))
+                                     vk_api.VkUserPermissions.PHOTOS),
+                              )     # captcha_handler=captcha_handler
 
     if proxy:
         vk_session.http.proxies = {'http': 'http://' + proxy,
@@ -50,10 +62,22 @@ def get_sessions(accounts):
 
 
 def send_message(session, user_id, message, attachment=None, forward=None):
-    return session.get_api().messages.send(user_id=int(user_id), message=message,
-                                           random_id=random.randint(-9223372036854775807, 9223372036854775807),
-                                           attachment=attachment,
-                                           forward_messages=forward)
+    func = session.get_api().messages.send
+    kwargs = {'user_id': int(user_id),
+              'message': message,
+              'random_id': random.randint(-9223372036854775807, 9223372036854775807),
+              'attachment': attachment,
+              'forward_messages': forward}
+    for sleep_time in range(30, 301, 30):
+        try:
+            return func(**kwargs)
+        except vk_api.exceptions.Captcha as e:
+            print('####################################')
+            print(f'CaptchaError occured in message to {user_id}, recovering during {sleep_time} secs...')
+            print('####################################', end='\n\n')    
+            time.sleep(sleep_time)
+    return func(**kwargs)
+
 
 
 def get_photo_attachment(session, url):

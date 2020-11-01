@@ -2,6 +2,7 @@
 import sqlite3
 
 __author__ = 'CubexX'
+__edited_by__ = 'Hukyl'
 
 # from werkzeug.contrib.fixers import ProxyFix
 

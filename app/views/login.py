@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'CubexX'
+__edited_by__ = 'Hukyl'
 
 from flask import render_template, session, \
     request, flash, get_flashed_messages, redirect

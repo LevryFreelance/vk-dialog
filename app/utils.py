@@ -34,7 +34,6 @@ def parse_accounts(data):
 
 def parse_commands(data):
     commands = re.findall(r"(\d)\[(\d+)\]=(.*)", data)
-
     return commands
 
 
@@ -51,3 +50,8 @@ def get_dialog_time(dialog):
     time_max = datetime.fromtimestamp(time_start + _time + latency_max).strftime('%H:%M, %d.%m')
 
     return time_min, time_max
+
+
+def print_into_file(msg):           # ADDED BY FREELANCER
+    with open('log.txt', 'a') as f:
+        print(msg, flush=True, file=f)

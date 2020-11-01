@@ -14,11 +14,11 @@ def delete_user(uid):
 
 
 def get_all_users():
-    return fetch_db('select * from users ORDER BY id DESC')
+    return fetch_db('SELECT * FROM users ORDER BY id DESC')
 
 
 def get_user(username, password):
-    return fetch_db('select * from users where username=? and password=?',
+    return fetch_db('SELECT * FROM users WHERE username=? AND password=?',
                     (username, md5(password)))
 
 
